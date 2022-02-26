@@ -21,19 +21,25 @@ var player2;
 var stars;
 var bombs;
 var platforms;
-var cursors;
 var score = 0;
 var gameOver = false;
 var scoreText;
+var audio;
+var audioIsPlaying;
+
+var cursors;
 
 var keyA;
 var keyS;
 var keyD;
 var keyW;
 
+var keyP;
+
 var game = new Phaser.Game(config);
 
 function preload() {
+  this.load.audio("music", "assets/music.mp3");
   this.load.image("sky", "assets/sky.png");
   this.load.image("ground", "assets/platform.png");
   this.load.image("star", "assets/star.png");
@@ -106,6 +112,8 @@ function create() {
   keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
   keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
 
+  keyP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
+
   //  Some stars to collect, 12 in total, evenly spaced 70 pixels apart along the x axis
   stars = this.physics.add.group({
     key: "star",
@@ -138,11 +146,25 @@ function create() {
 
   this.physics.add.collider(player, bombs, hitBomb, null, this);
   this.physics.add.collider(player2, bombs, hitBomb, null, this);
+
+  audio = this.sound.add("music", { loop: true });
+  audio.play();
+  audioIsPlaying = true;
 }
 
 function update() {
   if (gameOver) {
     return;
+  }
+
+  if (Phaser.Input.Keyboard.JustDown(keyP)) {
+    if (audioIsPlaying) {
+      audio.stop();
+      audioIsPlaying = false;
+    } else {
+      audio.play();
+      audioIsPlaying = true;
+    }
   }
 
   // Player 1 inputs
