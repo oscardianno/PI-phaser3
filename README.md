@@ -18,6 +18,8 @@
     - Transición al siguiente nivel al llegar al final
     - Que el último muestre un mensaje "Fin del juego" (?)
 - Agregar enemigos y/o implementar otro método para generar las bombas
+- ~~Agregar música~~
+    - ~~Funcionalidad de reproducir/pausar con la tecla P~~
 
 ***
 
