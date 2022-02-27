@@ -16,11 +16,12 @@ var config = {
   },
 };
 
+var map;
+var groundLayer;
 var player;
 var player2;
 var stars;
 var bombs;
-var platforms;
 var score = 0;
 var gameOver = false;
 var scoreText;
@@ -41,30 +42,36 @@ var game = new Phaser.Game(config);
 function preload() {
   this.load.audio("music", "assets/music.mp3");
   this.load.image("sky", "assets/sky.png");
-  this.load.image("ground", "assets/platform.png");
   this.load.image("star", "assets/star.png");
   this.load.image("bomb", "assets/bomb.png");
   this.load.spritesheet("dude", "assets/dude.png", {
     frameWidth: 32,
     frameHeight: 48,
   });
+  this.load.spritesheet("tiles", "assets/tiles.png", {
+    frameWidth: 70,
+    frameHeight: 70,
+  });
+  // Load the map made with Tiled in JSON format
+  this.load.tilemapTiledJSON("map", "assets/levels/map.json");
 }
 
 function create() {
   //  A simple background for our game
   this.add.image(400, 300, "sky");
 
-  //  The platforms group contains the ground and the 2 ledges we can jump on
-  platforms = this.physics.add.staticGroup();
+  // Add the map/level
+  map = this.make.tilemap({ key: "map" });
+  // Load the tiles for the ground layer
+  var groundTiles = map.addTilesetImage("tiles");
+  // Create the ground layer
+  groundLayer = map.createDynamicLayer("World", groundTiles, 0, 0);
+  // Make the player collide with this layer
+  groundLayer.setCollisionByExclusion([-1]);
 
-  //  Here we create the ground.
-  //  Scale it to fit the width of the game (the original sprite is 400x32 in size)
-  platforms.create(400, 568, "ground").setScale(2).refreshBody();
-
-  //  Now let's create some ledges
-  platforms.create(600, 400, "ground");
-  platforms.create(50, 250, "ground");
-  platforms.create(750, 220, "ground");
+  // Set the boundaries of the game world
+  this.physics.world.bounds.width = groundLayer.width;
+  this.physics.world.bounds.height = groundLayer.height;
 
   // ===--- F I R S T   P L A Y E R ---===
   // The player and its settings
@@ -134,11 +141,11 @@ function create() {
     fill: "#000",
   });
 
-  //  Collide the players and the stars with the platforms
-  this.physics.add.collider(player, platforms);
-  this.physics.add.collider(player2, platforms);
-  this.physics.add.collider(stars, platforms);
-  this.physics.add.collider(bombs, platforms);
+  //  Collide the players and the stars with the map
+  this.physics.add.collider(player, groundLayer);
+  this.physics.add.collider(player2, groundLayer);
+  this.physics.add.collider(stars, groundLayer);
+  this.physics.add.collider(bombs, groundLayer);
 
   //  Checks to see if the players overlaps with any of the stars, if he does call the collectStar function
   this.physics.add.overlap(player, stars, collectStar, null, this);
