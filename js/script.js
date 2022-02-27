@@ -189,8 +189,8 @@ function update() {
     player.anims.play("turn");
   }
 
-  if (cursors.up.isDown && player.body.touching.down) {
-    player.setVelocityY(-330);
+  if (cursors.up.isDown && player.body.onFloor()) {
+    player.setVelocityY(-360);
   }
 
   // Player 2 inputs
@@ -208,8 +208,8 @@ function update() {
     player2.anims.play("turn");
   }
 
-  if (keyW.isDown && player2.body.touching.down) {
-    player2.setVelocityY(-330);
+  if (keyW.isDown && player2.body.onFloor()) {
+    player2.setVelocityY(-360);
   }
 }
 
