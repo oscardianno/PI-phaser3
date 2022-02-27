@@ -57,8 +57,8 @@ function preload() {
 }
 
 function create() {
-  //  A simple background for our game
-  this.add.image(400, 300, "sky");
+  //  A simple background for our game: scrollFactor(0) makes it static.
+  this.add.image(400, 300, "sky").setScrollFactor(0);
 
   // Add the map/level
   map = this.make.tilemap({ key: "map" });
@@ -121,6 +121,11 @@ function create() {
 
   keyP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
 
+  // Camera: Set bounds so it won't go outside the game world
+  this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+  // Make the camera follow the first player
+  this.cameras.main.startFollow(player);
+
   //  Some stars to collect, 12 in total, evenly spaced 70 pixels apart along the x axis
   stars = this.physics.add.group({
     key: "star",
@@ -136,10 +141,12 @@ function create() {
   bombs = this.physics.add.group();
 
   //  The score
-  scoreText = this.add.text(16, 16, "score: 0", {
-    fontSize: "32px",
-    fill: "#000",
-  });
+  scoreText = this.add
+    .text(16, 16, "score: 0", {
+      fontSize: "32px",
+      fill: "#000",
+    })
+    .setScrollFactor(0);
 
   //  Collide the players and the stars with the map
   this.physics.add.collider(player, groundLayer);
