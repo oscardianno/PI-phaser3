@@ -8,10 +8,10 @@
     - Assets de jugador (animado)
     - Assets de estrellas, bombas
     - Enemigos (?)
-- Portada de inicio de juego
-    - Título de juego
-    - Botón Iniciar juego (requiere implementar cambio de escenas)
-    - Botón Créditos (incluye mostrar el cuadro con los créditos)
+- ~~Portada de inicio de juego~~
+    - ~~Título de juego~~
+    - ~~Botón Iniciar juego (requiere implementar cambio de escenas)~~
+    - ~~Botón Créditos (incluye mostrar el cuadro con los créditos)~~
 - 3 niveles tipo Mario (mínimo "4 pantallas de ancho") - Investigar uso de [Tiled Map Editor](https://www.mapeditor.org/)
     - ~~Agregar scroll de cámara, mantener fondo y score estáticos~~
     - Exportarlos a JSON y agregar en los cambios de escena
