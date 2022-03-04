@@ -16,6 +16,8 @@ var config = {
   },
 };
 
+//test1
+
 var map;
 var groundLayer;
 var player;
