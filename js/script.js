@@ -70,6 +70,8 @@ class Inicio extends Phaser.Scene {
 
 // ===--- G A M E   S C E N E ----------------------------------------------===
 class Game extends Phaser.Scene {
+  currentLevel;
+
   map;
   groundLayer;
   player;
@@ -92,6 +94,11 @@ class Game extends Phaser.Scene {
     super({ key: "game" });
   }
 
+  init(props) {
+    const { level = 1 } = props;
+    this.currentLevel = level;
+  }
+
   preload() {
     this.load.audio("music", "assets/music.mp3");
     this.load.image("background", "assets/background_green.png");
@@ -112,6 +119,7 @@ class Game extends Phaser.Scene {
     });
     // Load the map made with Tiled in JSON format
     this.load.tilemapTiledJSON("map", "assets/levels/map.json");
+    this.load.tilemapTiledJSON("map3", "assets/levels/map3.json");
   }
 
   create() {
@@ -121,7 +129,22 @@ class Game extends Phaser.Scene {
     bg.displayWidth = 800;
     bg.displayHeight = 600;
     // Add the map/level
-    this.map = this.make.tilemap({ key: "map" });
+    switch (this.currentLevel) {
+      case 1:
+        this.map = this.make.tilemap({ key: "map" });
+        break;
+      case 2:
+      case 3:
+        this.map = this.make.tilemap({ key: "map3" });
+        break;
+      case 4:
+        this.map = this.make.tilemap({ key: "map" });
+        // Go back to the first level
+        this.currentLevel = 1;
+      default:
+        this.map = this.make.tilemap({ key: "map" });
+        break;
+    }
     // Load the tiles for the ground layer
     this.groundTiles = this.map.addTilesetImage("tiles");
     // Create the ground layer
@@ -339,6 +362,11 @@ class Game extends Phaser.Scene {
     this.scoreText.setText("Score: " + this.score);
 
     if (this.sapphires.countActive(true) === 0) {
+      // TESTING ONLY: We go to the next level after collecting all sapphires
+      this.audio.stop();
+      this.audio = null;
+      this.scene.restart({ level: this.currentLevel + 1 });
+
       //  A new batch of sapphires to collect
       this.sapphires.children.iterate(function (child) {
         child.enableBody(true, child.x, 0, true, true);
