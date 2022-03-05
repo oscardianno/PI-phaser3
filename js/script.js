@@ -97,9 +97,13 @@ class Game extends Phaser.Scene {
     this.load.image("sky", "assets/sky.png");
     this.load.image("star", "assets/star.png");
     this.load.image("bomb", "assets/bomb.png");
-    this.load.spritesheet("dude", "assets/dude.png", {
-      frameWidth: 32,
-      frameHeight: 48,
+    // this.load.spritesheet("dude", "assets/dude.png", {
+    //   frameWidth: 32,
+    //   frameHeight: 48,
+    // });
+    this.load.spritesheet("player", "assets/player.png", {
+       frameWidth: 24,
+       frameHeight: 24,
     });
     this.load.spritesheet("tiles", "assets/tiles.png", {
       frameWidth: 70,
@@ -132,39 +136,54 @@ class Game extends Phaser.Scene {
 
     // ===--- F I R S T   P L A Y E R ---===
     // The player and its settings
-    this.player = this.physics.add.sprite(100, 450, "dude");
+    this.player = this.physics.add.sprite(200, 200, "player");
+    this.player.setScale(2.5);
 
     //  Player physics properties. Give the little guy a slight bounce.
     this.player.setBounce(0.2);
     this.player.setCollideWorldBounds(true);
 
-    //  Our player animations, turning, walking left and walking right.
+    //  Our player animations, walking
     this.anims.create({
-      key: "left",
-      frames: this.anims.generateFrameNumbers("dude", { start: 0, end: 3 }),
+      key: "walk",
+      frames: this.anims.generateFrameNumbers("player", { start: 0, end: 3 }),
       frameRate: 10,
       repeat: -1,
     });
-
+        
     this.anims.create({
-      key: "turn",
-      frames: [{ key: "dude", frame: 4 }],
+      key: "idle",
+      frames: [{ key: "player", frame: 3 }],
       frameRate: 20,
     });
 
-    this.anims.create({
-      key: "right",
-      frames: this.anims.generateFrameNumbers("dude", { start: 5, end: 8 }),
-      frameRate: 10,
-      repeat: -1,
-    });
+    // this.anims.create({
+    //   key: "left",
+    //   frames: this.anims.generateFrameNumbers("dude", { start: 0, end: 3 }),
+    //   frameRate: 10,
+    //   repeat: -1,
+    // });
+
+    // this.anims.create({
+    //   key: "turn",
+    //   frames: [{ key: "dude", frame: 4 }],
+    //   frameRate: 20,
+    // });
+
+    // this.anims.create({
+    //   key: "right",
+    //   frames: this.anims.generateFrameNumbers("dude", { start: 5, end: 8 }),
+    //   frameRate: 10,
+    //   repeat: -1,
+    // });
 
     //  Input Events
     this.cursors = this.input.keyboard.createCursorKeys();
 
     // ===--- S E C O N D   P L A Y E R ---===
     // The player and its settings
-    this.player2 = this.physics.add.sprite(120, 450, "dude");
+    this.player2 = this.physics.add.sprite(120, 450, "player");
+    this.player2.setScale(2.5);
 
     //  Player physics properties. Give the little guy a slight bounce.
     this.player2.setBounce(0.2);
@@ -270,15 +289,19 @@ class Game extends Phaser.Scene {
     if (this.cursors.left.isDown) {
       this.player.setVelocityX(-160);
 
-      this.player.anims.play("left", true);
+      this.player.anims.play("walk", true);
+
+      this.player.flipX = true;
     } else if (this.cursors.right.isDown) {
       this.player.setVelocityX(160);
 
-      this.player.anims.play("right", true);
+      this.player.anims.play("walk", true);
+
+      this.player.flipX = false;
     } else {
       this.player.setVelocityX(0);
 
-      this.player.anims.play("turn");
+      this.player.anims.play("idle", true);
     }
 
     if (this.cursors.up.isDown && this.player.body.onFloor()) {
@@ -289,15 +312,19 @@ class Game extends Phaser.Scene {
     if (this.keyA.isDown) {
       this.player2.setVelocityX(-160);
 
-      this.player2.anims.play("left", true);
+      this.player2.anims.play("walk", true);
+
+      this.player2.flipX = true;
     } else if (this.keyD.isDown) {
       this.player2.setVelocityX(160);
 
-      this.player2.anims.play("right", true);
+      this.player2.anims.play("walk", true);
+
+      this.player2.flipX = false;
     } else {
       this.player2.setVelocityX(0);
 
-      this.player2.anims.play("turn");
+      this.player2.anims.play("idle", true);
     }
 
     if (this.keyW.isDown && this.player2.body.onFloor()) {
@@ -354,6 +381,7 @@ var config = {
       debug: false,
     },
   },
+  pixelArt: true,
   scene: [Inicio, Game, Credits],
 };
 
