@@ -2,12 +2,12 @@
 
 **To-Do**  
 - ~~2 jugadores localmente~~
-- Assets nuevos
+- ~~Assets nuevos~~
     - Assets de niveles (tiles)
-    - Fondo
-    - Assets de jugador (animado)
-    - Assets de estrellas, bombas
-    - Enemigos (?)
+    - ~~Fondo~~
+    - ~~Assets de jugador (animado)~~
+    - ~~Assets de estrellas~~, bombas
+    - ~~Enemigos (?)~~
 - ~~Portada de inicio de juego~~
     - ~~Título de juego~~
     - ~~Botón Iniciar juego (requiere implementar cambio de escenas)~~
@@ -17,7 +17,7 @@
     - Exportarlos a JSON y agregar en los cambios de escena
     - Transición al siguiente nivel al llegar al final
     - Que el último muestre un mensaje "Fin del juego" (?)
-- Agregar enemigos y/o implementar otro método para generar las bombas
+- Implementar otro método para generar las bombas
 - ~~Agregar música~~
     - ~~Funcionalidad de reproducir/pausar con la tecla P~~
 
