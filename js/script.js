@@ -99,8 +99,12 @@ class Game extends Phaser.Scene {
     this.load.image("bomb", "assets/bomb.png");
 
     this.load.spritesheet("player", "assets/player.png", {
-       frameWidth: 24,
-       frameHeight: 24,
+      frameWidth: 24,
+      frameHeight: 24,
+    });
+    this.load.spritesheet("player2", "assets/player2.png", {
+      frameWidth: 24,
+      frameHeight: 24,
     });
     this.load.spritesheet("tiles", "assets/tiles.png", {
       frameWidth: 70,
@@ -150,7 +154,7 @@ class Game extends Phaser.Scene {
       frameRate: 10,
       repeat: -1,
     });
-        
+
     this.anims.create({
       key: "idle",
       frames: [{ key: "player", frame: 3 }],
@@ -162,12 +166,26 @@ class Game extends Phaser.Scene {
 
     // ===--- S E C O N D   P L A Y E R ---===
     // The player and its settings
-    this.player2 = this.physics.add.sprite(120, 450, "player");
+    this.player2 = this.physics.add.sprite(120, 450, "player2");
     this.player2.setScale(2.5);
 
     //  Player physics properties. Give the little guy a slight bounce.
     this.player2.setBounce(0.2);
     this.player2.setCollideWorldBounds(true);
+
+    //  Our player animations, walking
+    this.anims.create({
+      key: "walk_p2",
+      frames: this.anims.generateFrameNumbers("player2", { start: 0, end: 3 }),
+      frameRate: 10,
+      repeat: -1,
+    });
+
+    this.anims.create({
+      key: "idle_p2",
+      frames: [{ key: "player2", frame: 3 }],
+      frameRate: 20,
+    });
 
     //  Input Events
     this.keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
@@ -191,7 +209,7 @@ class Game extends Phaser.Scene {
       key: "sapphire",
       repeat: 11,
       setXY: { x: 12, y: 0, stepX: 70 },
-      setScale: { x: 0.5, y: 0.5}
+      setScale: { x: 0.5, y: 0.5 },
     });
 
     this.sapphires.children.iterate(function (child) {
@@ -293,19 +311,19 @@ class Game extends Phaser.Scene {
     if (this.keyA.isDown) {
       this.player2.setVelocityX(-160);
 
-      this.player2.anims.play("walk", true);
+      this.player2.anims.play("walk_p2", true);
 
       this.player2.flipX = true;
     } else if (this.keyD.isDown) {
       this.player2.setVelocityX(160);
 
-      this.player2.anims.play("walk", true);
+      this.player2.anims.play("walk_p2", true);
 
       this.player2.flipX = false;
     } else {
       this.player2.setVelocityX(0);
 
-      this.player2.anims.play("idle", true);
+      this.player2.anims.play("idle_p2", true);
     }
 
     if (this.keyW.isDown && this.player2.body.onFloor()) {
