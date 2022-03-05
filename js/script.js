@@ -257,7 +257,25 @@ class Game extends Phaser.Scene {
       child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
     });
 
+    // Spawn bombs all across the map
     this.bombs = this.physics.add.group();
+    var bombsInFirstMiddle = 0;
+    var numberOfBombs = 5 + this.currentLevel * 5;
+    for (var i = 0; i < numberOfBombs; i++) {
+      var x = Phaser.Math.Between(600, 4170);
+      if (x < 2000) {
+        if (bombsInFirstMiddle >= numberOfBombs / 2) {
+          x += 2000;
+        } else {
+          bombsInFirstMiddle++;
+        }
+      }
+      var bomb = this.bombs.create(x, 400, "bomb");
+      bomb.setBounce(1);
+      bomb.setCollideWorldBounds(true);
+      bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
+      bomb.allowGravity = false;
+    }
 
     //  The score
     this.scoreText = this.add
@@ -267,10 +285,11 @@ class Game extends Phaser.Scene {
       })
       .setScrollFactor(0);
 
-    //  Collide the players, sapphires and flag with the map
+    //  Collide the players sapphires, bombs and flag with the map
     this.physics.add.collider(this.player, this.groundLayer);
     this.physics.add.collider(this.player2, this.groundLayer);
     this.physics.add.collider(this.sapphires, this.groundLayer);
+    this.physics.add.collider(this.bombs, this.groundLayer);
     this.physics.add.collider(this.flag, this.groundLayer);
 
     //  Checks to see if the players overlaps with any of the sapphires, if he does call the collectStar function
@@ -393,23 +412,12 @@ class Game extends Phaser.Scene {
     this.score += 10;
     this.scoreText.setText("Score: " + this.score);
 
-    if (this.sapphires.countActive(true) === 0) {
+    /* if (this.sapphires.countActive(true) === 0) {
       //  A new batch of sapphires to collect
       this.sapphires.children.iterate(function (child) {
         child.enableBody(true, child.x, 0, true, true);
       });
-
-      var x =
-        player.x < 400
-          ? Phaser.Math.Between(400, 800)
-          : Phaser.Math.Between(0, 400);
-
-      var bomb = this.bombs.create(x, 16, "bomb");
-      bomb.setBounce(1);
-      bomb.setCollideWorldBounds(true);
-      bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
-      bomb.allowGravity = false;
-    }
+    } */
   }
 
   hitBomb(player, bomb) {
