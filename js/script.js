@@ -97,10 +97,7 @@ class Game extends Phaser.Scene {
     this.load.image("sky", "assets/sky.png");
     this.load.image("star", "assets/star.png");
     this.load.image("bomb", "assets/bomb.png");
-    // this.load.spritesheet("dude", "assets/dude.png", {
-    //   frameWidth: 32,
-    //   frameHeight: 48,
-    // });
+
     this.load.spritesheet("player", "assets/player.png", {
        frameWidth: 24,
        frameHeight: 24,
@@ -156,26 +153,6 @@ class Game extends Phaser.Scene {
       frames: [{ key: "player", frame: 3 }],
       frameRate: 20,
     });
-
-    // this.anims.create({
-    //   key: "left",
-    //   frames: this.anims.generateFrameNumbers("dude", { start: 0, end: 3 }),
-    //   frameRate: 10,
-    //   repeat: -1,
-    // });
-
-    // this.anims.create({
-    //   key: "turn",
-    //   frames: [{ key: "dude", frame: 4 }],
-    //   frameRate: 20,
-    // });
-
-    // this.anims.create({
-    //   key: "right",
-    //   frames: this.anims.generateFrameNumbers("dude", { start: 5, end: 8 }),
-    //   frameRate: 10,
-    //   repeat: -1,
-    // });
 
     //  Input Events
     this.cursors = this.input.keyboard.createCursorKeys();
