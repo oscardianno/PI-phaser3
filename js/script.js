@@ -180,7 +180,7 @@ class Game extends Phaser.Scene {
 
     // ===--- F I R S T   P L A Y E R ---===
     // The player and its settings
-    this.player = this.physics.add.sprite(200, 200, "player");
+    this.player = this.physics.add.sprite(200, 800, "player");
     this.player.setScale(2.5);
 
     //  Player physics properties. Give the little guy a slight bounce.
@@ -206,7 +206,7 @@ class Game extends Phaser.Scene {
 
     // ===--- S E C O N D   P L A Y E R ---===
     // The player and its settings
-    this.player2 = this.physics.add.sprite(120, 450, "player2");
+    this.player2 = this.physics.add.sprite(120, 800, "player2");
     this.player2.setScale(2.5);
 
     //  Player physics properties. Give the little guy a slight bounce.
