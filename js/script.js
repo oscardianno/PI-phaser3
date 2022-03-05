@@ -119,6 +119,7 @@ class Game extends Phaser.Scene {
     });
     // Load the map made with Tiled in JSON format
     this.load.tilemapTiledJSON("map", "assets/levels/map.json");
+    this.load.tilemapTiledJSON("map2", "assets/levels/map2.json");
     this.load.tilemapTiledJSON("map3", "assets/levels/map3.json");
   }
 
@@ -134,13 +135,12 @@ class Game extends Phaser.Scene {
         this.map = this.make.tilemap({ key: "map" });
         break;
       case 2:
+        this.map = this.make.tilemap({ "key": "map2" });
       case 3:
         this.map = this.make.tilemap({ key: "map3" });
-        break;
-      case 4:
-        this.map = this.make.tilemap({ key: "map" });
         // Go back to the first level
         this.currentLevel = 1;
+        break;
       default:
         this.map = this.make.tilemap({ key: "map" });
         break;
