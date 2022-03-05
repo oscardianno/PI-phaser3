@@ -135,13 +135,13 @@ class Game extends Phaser.Scene {
         this.map = this.make.tilemap({ key: "map" });
         break;
       case 2:
-        this.map = this.make.tilemap({ "key": "map2" });
+        this.map = this.make.tilemap({ key: "map2" });
+        break;
       case 3:
         this.map = this.make.tilemap({ key: "map3" });
-        // Go back to the first level
-        this.currentLevel = 1;
         break;
       default:
+        this.currentLevel = 1;
         this.map = this.make.tilemap({ key: "map" });
         break;
     }
