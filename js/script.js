@@ -78,6 +78,7 @@ class Game extends Phaser.Scene {
   player2;
   sapphires;
   bombs;
+  flag;
   cursors;
   audio;
   audioIsPlaying;
@@ -116,6 +117,10 @@ class Game extends Phaser.Scene {
     this.load.spritesheet("tiles", "assets/tiles.png", {
       frameWidth: 70,
       frameHeight: 70,
+    });
+    this.load.spritesheet("flag", "assets/flag.png", {
+      frameWidth: 16,
+      frameHeight: 32,
     });
     // Load the map made with Tiled in JSON format
     this.load.tilemapTiledJSON("map", "assets/levels/map.json");
@@ -160,6 +165,18 @@ class Game extends Phaser.Scene {
     // Set the boundaries of the game world
     this.physics.world.bounds.width = this.groundLayer.width;
     this.physics.world.bounds.height = this.groundLayer.height;
+
+    // Place a flag at the end of the level
+    this.flag = this.physics.add.sprite(4170, 700, "flag");
+    this.flag.setScale(4);
+    this.flag.setCollideWorldBounds(true);
+    this.anims.create({
+      key: "flag-wind",
+      frames: this.anims.generateFrameNumbers("flag", { start: 0, end: 3 }),
+      frameRate: 7,
+      repeat: -1,
+    });
+    this.flag.anims.play("flag-wind", true);
 
     // ===--- F I R S T   P L A Y E R ---===
     // The player and its settings
@@ -250,11 +267,11 @@ class Game extends Phaser.Scene {
       })
       .setScrollFactor(0);
 
-    //  Collide the players and the sapphires with the map
+    //  Collide the players, sapphires and flag with the map
     this.physics.add.collider(this.player, this.groundLayer);
     this.physics.add.collider(this.player2, this.groundLayer);
     this.physics.add.collider(this.sapphires, this.groundLayer);
-    this.physics.add.collider(this.bombs, this.groundLayer);
+    this.physics.add.collider(this.flag, this.groundLayer);
 
     //  Checks to see if the players overlaps with any of the sapphires, if he does call the collectStar function
     this.physics.add.overlap(
@@ -283,6 +300,21 @@ class Game extends Phaser.Scene {
       this.player2,
       this.bombs,
       this.hitBomb,
+      null,
+      this
+    );
+
+    this.physics.add.overlap(
+      this.player,
+      this.flag,
+      this.touchFlag,
+      null,
+      this
+    );
+    this.physics.add.overlap(
+      this.player2,
+      this.flag,
+      this.touchFlag,
       null,
       this
     );
@@ -362,11 +394,6 @@ class Game extends Phaser.Scene {
     this.scoreText.setText("Score: " + this.score);
 
     if (this.sapphires.countActive(true) === 0) {
-      // TESTING ONLY: We go to the next level after collecting all sapphires
-      this.audio.stop();
-      this.audio = null;
-      this.scene.restart({ level: this.currentLevel + 1 });
-
       //  A new batch of sapphires to collect
       this.sapphires.children.iterate(function (child) {
         child.enableBody(true, child.x, 0, true, true);
@@ -393,6 +420,13 @@ class Game extends Phaser.Scene {
     player.anims.play("turn");
 
     this.gameOver = true;
+  }
+
+  touchFlag(player, flag) {
+    this.physics.pause();
+    this.audio.stop();
+    this.audio = null;
+    this.scene.restart({ level: this.currentLevel + 1 });
   }
 }
 
