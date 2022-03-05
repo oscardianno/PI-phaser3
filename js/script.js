@@ -74,7 +74,7 @@ class Game extends Phaser.Scene {
   groundLayer;
   player;
   player2;
-  stars;
+  sapphires;
   bombs;
   cursors;
   audio;
@@ -94,8 +94,8 @@ class Game extends Phaser.Scene {
 
   preload() {
     this.load.audio("music", "assets/music.mp3");
-    this.load.image("sky", "assets/sky.png");
-    this.load.image("star", "assets/star.png");
+    this.load.image("background", "assets/background_green.png");
+    this.load.image("sapphire", "assets/sapphire_1.png");
     this.load.image("bomb", "assets/bomb.png");
 
     this.load.spritesheet("player", "assets/player.png", {
@@ -112,7 +112,10 @@ class Game extends Phaser.Scene {
 
   create() {
     //  A simple background for our game: scrollFactor(0) makes it static.
-    this.add.image(400, 300, "sky").setScrollFactor(0);
+    let bg = this.add.image(400, 300, "background");
+    bg.setScrollFactor(0);
+    bg.displayWidth = 800;
+    bg.displayHeight = 600;
     // Add the map/level
     this.map = this.make.tilemap({ key: "map" });
     // Load the tiles for the ground layer
@@ -183,15 +186,16 @@ class Game extends Phaser.Scene {
     // Make the camera follow the first player
     this.cameras.main.startFollow(this.player);
 
-    //  Some stars to collect, 12 in total, evenly spaced 70 pixels apart along the x axis
-    this.stars = this.physics.add.group({
-      key: "star",
+    //  Some sapphires to collect, 12 in total, evenly spaced 70 pixels apart along the x axis
+    this.sapphires = this.physics.add.group({
+      key: "sapphire",
       repeat: 11,
       setXY: { x: 12, y: 0, stepX: 70 },
+      setScale: { x: 0.5, y: 0.5}
     });
 
-    this.stars.children.iterate(function (child) {
-      //  Give each star a slightly different bounce
+    this.sapphires.children.iterate(function (child) {
+      //  Give each sapphire a slightly different bounce
       child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
     });
 
@@ -205,23 +209,23 @@ class Game extends Phaser.Scene {
       })
       .setScrollFactor(0);
 
-    //  Collide the players and the stars with the map
+    //  Collide the players and the sapphires with the map
     this.physics.add.collider(this.player, this.groundLayer);
     this.physics.add.collider(this.player2, this.groundLayer);
-    this.physics.add.collider(this.stars, this.groundLayer);
+    this.physics.add.collider(this.sapphires, this.groundLayer);
     this.physics.add.collider(this.bombs, this.groundLayer);
 
-    //  Checks to see if the players overlaps with any of the stars, if he does call the collectStar function
+    //  Checks to see if the players overlaps with any of the sapphires, if he does call the collectStar function
     this.physics.add.overlap(
       this.player,
-      this.stars,
+      this.sapphires,
       this.collectStar,
       null,
       this
     );
     this.physics.add.overlap(
       this.player2,
-      this.stars,
+      this.sapphires,
       this.collectStar,
       null,
       this
@@ -309,16 +313,16 @@ class Game extends Phaser.Scene {
     }
   }
 
-  collectStar(player, star) {
-    star.disableBody(true, true);
+  collectStar(player, sapphire) {
+    sapphire.disableBody(true, true);
 
     //  Add and update the score
     this.score += 10;
     this.scoreText.setText("Score: " + this.score);
 
-    if (this.stars.countActive(true) === 0) {
-      //  A new batch of stars to collect
-      this.stars.children.iterate(function (child) {
+    if (this.sapphires.countActive(true) === 0) {
+      //  A new batch of sapphires to collect
+      this.sapphires.children.iterate(function (child) {
         child.enableBody(true, child.x, 0, true, true);
       });
 
